@@ -12,7 +12,7 @@ import { Article } from '../../interfaces/interfaces';
 export class Tab2Page implements OnInit {
 
 @ViewChild( IonSegment, {static: true}) segment: IonSegment;
-categorias = ['technology', 'business', 'entertainment', 'general', 'health', 'science', 'sports', ];
+categorias = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology', ];
 noticias: Article [] = [];
 
 constructor(private NoticiasServices: NoticiasService) {
@@ -20,9 +20,15 @@ constructor(private NoticiasServices: NoticiasService) {
 }
 
 ngOnInit() {
+  // this.segment.value = this.categorias[0];
   this.segment.value = this.categorias[0];
   this.CargarNoticias( this.categorias[0]);
 }
+ionViewDidEnter() {
+  // Probar en el ionViewDidEnter
+  this.segment.value = this.categorias[0];
+}
+
 cambioCategoria(event) {
   this.noticias = [];
 
@@ -33,13 +39,16 @@ cambioCategoria(event) {
 CargarNoticias(categoria: string, event?) {
 
   this.NoticiasServices.getTopHEadLinesCategoria(categoria).subscribe(respuesta => {
-    console.log('Encabezados', respuesta);
+    // console.log('Encabezados', respuesta);
     this.noticias.push(...respuesta.articles);
     if ( event ) {
       event.target.complete();
     }
     });
-
-
 }
+
+loadData(event) {
+  this.CargarNoticias(this.segment.value, event);
+}
+
 }

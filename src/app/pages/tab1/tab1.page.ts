@@ -13,9 +13,27 @@ noticias: Article[] = [];
 
   }
   ngOnInit() {
+    this.cargarNoticias();
+  }
+
+  loadData(event) {
+    this.cargarNoticias(event);
+  }
+
+  cargarNoticias(event?) {
     this.NoticiasServices.getTopHEadLines().subscribe(respuesta => {
-      console.log('para ti',  respuesta);
+      //  console.log('para ti',  respuesta);
+      if (respuesta.articles.length === 0) {
+          event.target.disabled = true;
+          event.target.complete();
+          return;
+      }
       this.noticias.push(...respuesta.articles);
+
+      if (event) {
+          event.target.complete();
+        }
+
     });
   }
 }
